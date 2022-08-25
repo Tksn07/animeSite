@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import logo from '../../../logo.svg';
 import MusicLibrary from "./MusicLibrary";
+import { useMusicPlayerDispatch } from "../../../containers/music/dispatch";
 
 
 /** 
@@ -12,6 +13,7 @@ import MusicLibrary from "./MusicLibrary";
  */
 const Music = () => {
   const [musicSrc, setMusicSrc] = useState<string>("")
+  const { requestFetchMusicAlbum } = useMusicPlayerDispatch()
 
   const handleOnPlay = (e: Event) => {
     console.log("動け！")
@@ -26,6 +28,11 @@ const Music = () => {
     setMusicSrc("https://www.ne.jp/asahi/music/myuu/wave/menuettm.mp3")
     console.log(musicSrc)
   }
+
+  useEffect(() => {
+    console.log("こんいちは")
+    requestFetchMusicAlbum()
+  })
 
   return (
     <>
@@ -50,6 +57,7 @@ const GlobalStyle = createGlobalStyle`
   html,
   body {
     height: 100%;
+    background-color: #051b34;
   }
 `
 

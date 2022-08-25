@@ -1,8 +1,16 @@
 import { useDispatch } from 'react-redux'
 import { useCallback } from 'react'
+import { requestFetchMusicAlbum } from './slice'
 
-export const musicPlayerDispatch = () => {
+export const useMusicPlayerDispatch = () => {
   const dispatch = useDispatch()
 
-  return {}
+  const requestFetchMusicAlbumCallback = useCallback(
+    () => dispatch(requestFetchMusicAlbum()),
+    [dispatch]
+  )
+  
+  return {
+    requestFetchMusicAlbum: requestFetchMusicAlbumCallback,
+  }
 }

@@ -4,13 +4,18 @@ import './index.css';
 import App from './App';
 import Root from './routes';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux'
+import initializeStore from './reducers/store';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
-    <Root />
+    <Provider store={initializeStore()}>
+      <Root />
+    </Provider>
   </React.StrictMode>
 );
 

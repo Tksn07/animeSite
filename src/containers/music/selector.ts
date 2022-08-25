@@ -1,2 +1,4 @@
 import { useSelector, shallowEqual } from 'react-redux'
-import { createSelector } from 'reselect'
+
+export const useMusicAlbumSelector = () =>
+  useSelector((state) => state, shallowEqual)

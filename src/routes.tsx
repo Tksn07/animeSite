@@ -6,6 +6,7 @@ import Music from "./components/pages/music/index"
 import Video from "./components/pages/video";
 
 export const Root = () => {
+
   return (
     <BrowserRouter>
       <Routes>
