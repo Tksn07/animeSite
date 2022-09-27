@@ -1,34 +1,131 @@
-import { useEffect } from "react";
-
-const fetchUser = async (init: RequestInit) => {
-  const res = await fetch(
-    "https://tasks.googleapis.com/tasks/v1/users/@me/lists",
-    init
-  );
-  return res.json();
-};
+import { Button, TextField } from "@mui/material";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { TodoCard } from "../../molecules/TodoCard";
 
 interface AccessHeader {
   accessToken: string;
 }
 
 const Example = ({ accessToken }: AccessHeader) => {
+  const [todoItems, setTodoItems] = useState<any[]>();
+  const [taskListId, setTaskListId] = useState<string>();
+
   // request headerを作成
   const init: RequestInit = {
     headers: { Authorization: `Bearer ${accessToken}` },
   };
 
-  useEffect(() => {
-    fetchUser(init).then((data) => {
-      console.log(data);
+  // todoリストを取得する
+  const fetchUser = async (init: RequestInit) => {
+    // taskのリストを取得
+    const res = await fetch(
+      "https://tasks.googleapis.com/tasks/v1/users/@me/lists",
+      init
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .catch((res) => {
+        console.log("エラーが起きたよ！", res);
+      });
+
+    // TODOを入れるタスクのIDを取得
+    setTaskListId(res.items[0].id);
+
+    // TODO listを取得
+    const taskRes = await fetch(
+      `https://tasks.googleapis.com/tasks/v1/lists/${taskListId}/tasks`,
+      init
+    ).then((res) => {
+      return res.json();
     });
-  });
+    return taskRes.items;
+  };
+
+  useEffect(() => {
+    console.log("取得してきます！");
+    fetchUser(init).then((data) => {
+      setTodoItems(data);
+    });
+    console.log("取得してきました！");
+  }, [accessToken]);
+  console.log(todoItems);
+
+  const handleAddClick = () => {
+    console.log("動いてるよ");
+    // request headerを作成
+    // const createInit: RequestInit = {
+    //   method: "POST",
+    //   headers: { Authorization: `Bearer ${accessToken}` },
+    // };
+
+    // const create = async (init: RequestInit) => {
+    //   const createTask = "追加したよ！";
+
+    //   const res = await fetch(
+    //     `https://tasks.googleapis.com/tasks/v1/lists/${taskListId}/tasks?previous=${createTask}`,
+    //     init
+    //   ).then((res) => {
+    //     return res.json();
+    //   });
+
+    //   return res;
+    // };
+
+    // return create(createInit);
+  };
 
   return (
-    <>
-      <h1>ReactQuerySampleです。</h1>
-    </>
+    <Body>
+      <PageTitle>TODOリスト</PageTitle>
+      <div>
+        <InputBlock>
+          <TextField
+            label="タスク名を入力してください"
+            sx={{ width: "27ch" }}
+            variant="standard"
+          />
+          <AddButton>
+            <Button variant="outlined" color="primary" onClick={handleAddClick}>
+              追加
+            </Button>
+          </AddButton>
+        </InputBlock>
+      </div>
+
+      {todoItems &&
+        todoItems.map((todoItem) => {
+          return (
+            <TodoCardWrapper>
+              <TodoCard text={todoItem.title} />
+            </TodoCardWrapper>
+          );
+        })}
+    </Body>
   );
 };
 
 export default Example;
+
+const Body = styled.div`
+  margin-left: 40px;
+`;
+
+const PageTitle = styled.h1`
+  margin-bottom: 40px;
+`;
+
+const TodoCardWrapper = styled.div`
+  margin: 16px 0px;
+`;
+
+const AddButton = styled.div`
+  margin-left: 16px;
+`;
+
+const InputBlock = styled.div`
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 36px;
+`;
