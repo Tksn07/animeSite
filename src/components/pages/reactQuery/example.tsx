@@ -10,6 +10,8 @@ interface AccessHeader {
 const Example = ({ accessToken }: AccessHeader) => {
   const [todoItems, setTodoItems] = useState<any[]>();
   const [taskListId, setTaskListId] = useState<string>();
+  const [taskId, setTaskId] = useState<number>();
+  const [taskTitle, setTaskTitle] = useState<string>();
 
   // request headerを作成
   const init: RequestInit = {
@@ -51,29 +53,59 @@ const Example = ({ accessToken }: AccessHeader) => {
     console.log("取得してきました！");
   }, [accessToken]);
   console.log(todoItems);
+  console.log(accessToken);
 
+  // 追加処理
   const handleAddClick = () => {
     console.log("動いてるよ");
     // request headerを作成
-    // const createInit: RequestInit = {
-    //   method: "POST",
-    //   headers: { Authorization: `Bearer ${accessToken}` },
-    // };
+    const createInit: RequestInit = {
+      method: "POST",
+      headers: { Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ title: taskTitle }),
+    };
 
-    // const create = async (init: RequestInit) => {
-    //   const createTask = "追加したよ！";
+    const create = async (init: RequestInit) => {
+      console.log(taskListId);
 
-    //   const res = await fetch(
-    //     `https://tasks.googleapis.com/tasks/v1/lists/${taskListId}/tasks?previous=${createTask}`,
-    //     init
-    //   ).then((res) => {
-    //     return res.json();
-    //   });
+      const res = await fetch(
+        `https://tasks.googleapis.com/tasks/v1/lists/${taskListId}/tasks`,
+        init
+      ).then((res) => {
+        return res.json();
+      });
 
-    //   return res;
-    // };
+      return res;
+    };
+    create(createInit);
+    setTaskTitle("");
+    return;
+  };
 
-    // return create(createInit);
+  // 削除処理
+  const handleDeleteClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    console.log(e);
+    return;
+
+    const deleteInit: RequestInit = {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+
+    const deleteRes = async (init: RequestInit) => {
+      const res = await fetch(
+        `https://tasks.googleapis.com/tasks/v1/lists/${taskListId}/tasks/${taskId}`,
+        init
+      ).then((res) => {
+        return res.json();
+      });
+
+      return res;
+    };
+
+    return deleteRes(deleteInit);
   };
 
   return (
@@ -85,6 +117,10 @@ const Example = ({ accessToken }: AccessHeader) => {
             label="タスク名を入力してください"
             sx={{ width: "27ch" }}
             variant="standard"
+            onChange={(e) => {
+              setTaskTitle(e.target.value);
+              console.log(taskTitle);
+            }}
           />
           <AddButton>
             <Button variant="outlined" color="primary" onClick={handleAddClick}>
@@ -98,7 +134,10 @@ const Example = ({ accessToken }: AccessHeader) => {
         todoItems.map((todoItem) => {
           return (
             <TodoCardWrapper>
-              <TodoCard text={todoItem.title} />
+              <TodoCard
+                text={todoItem.title}
+                handleDeleteClick={handleDeleteClick}
+              />
             </TodoCardWrapper>
           );
         })}

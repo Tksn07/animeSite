@@ -3,13 +3,12 @@ import styled from "styled-components";
 
 interface Content {
   text: string;
+  handleDeleteClick: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
 }
 
-export const TodoCard = ({ text }: Content) => {
-  const handleDeleteClick = () => {
-    console.log("こんばんは");
-  };
-
+export const TodoCard = ({ text, handleDeleteClick }: Content) => {
   return (
     <TaskCard>
       <CheckboxBlock>
@@ -20,7 +19,7 @@ export const TodoCard = ({ text }: Content) => {
         <DeleteButtonWrapper
           variant="outlined"
           color="error"
-          onClick={handleDeleteClick}
+          onClick={(e) => handleDeleteClick(e)}
         >
           削除
         </DeleteButtonWrapper>
