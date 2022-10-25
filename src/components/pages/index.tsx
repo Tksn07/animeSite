@@ -14,6 +14,19 @@ export const Home = () => {
           状態管理ライブラリQueryProviderを使ってみた
         </Link>
       </div>
+      <div>
+        <Link to="/react-swipe">ReactSwipeのライブラリを触ってみた</Link>
+      </div>
+      <div>
+        <Link to="/react-swipeable">
+          ReactSwipeableのライブラリを触ってみた
+        </Link>
+      </div>
+      <div>
+        <Link to="/react-swipeable-view">
+          ReactSwipeableViewのライブラリを触ってみた
+        </Link>
+      </div>
     </>
   );
 };

@@ -4,6 +4,9 @@ import YurucampHome from "./components/pages/yurucamp/index";
 import Music from "./components/pages/music/index";
 import Video from "./components/pages/video";
 import ReactQuerySample from "./components/pages/reactQuery";
+import ReactSwipeDemo from "./components/pages/react-swipe/ReactSwipeDemo";
+import ReactSwipeableDemo from "./components/pages/react-swipeable/ReactSwipeablePage";
+import ReactSwipeableViewDemo from "./components/pages/react-swipeable-views/ReactSwipeableView";
 
 export const Root = () => {
   return (
@@ -16,6 +19,12 @@ export const Root = () => {
         <Route
           path="queryProviderSample"
           element={<ReactQuerySample />}
+        ></Route>
+        <Route path="react-swipe" element={<ReactSwipeDemo />}></Route>
+        <Route path="react-swipeable" element={<ReactSwipeableDemo />}></Route>
+        <Route
+          path="react-swipeable-view"
+          element={<ReactSwipeableViewDemo />}
         ></Route>
       </Routes>
     </BrowserRouter>
